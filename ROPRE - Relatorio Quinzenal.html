@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>R.O.P.R.E — Relatório Estratégico Quinzenal</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ───────── SISTEMA DE DESIGN ───────── */
+  :root {
+    --bg:        #0A0A0B;
+    --bg-2:      #111114;
+    --bg-3:      #17171B;
+    --line:      rgba(255,255,255,0.08);
+    --line-2:    rgba(255,255,255,0.14);
+    --ink:       #F4F2EC;
+    --ink-2:     rgba(244,242,236,0.72);
+    --ink-3:     rgba(244,242,236,0.48);
+    --ink-4:     rgba(244,242,236,0.28);
+    --gold:      #C9A14A;       /* dourado de destaque */
+    --gold-2:    #E2C275;       /* gold light */
+    --gold-3:    #8B6B2A;       /* gold deep */
+    --gold-tint: rgba(201,161,74,0.10);
+    --green:     #6FBF8F;
+    --red:       #D9836C;
+
+    --font-sans: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  html, body { margin: 0; padding: 0; background: #000; color: var(--ink); font-family: var(--font-sans); }
+  deck-stage:not(:defined) { visibility: hidden; }
+  deck-stage { background: #000; }
+
+  /* ───────── TRANSIÇÃO HORIZONTAL (slides entram pela direita) ───────── */
+  deck-stage > section {
+    opacity: 0 !important;
+    transform: translateX(72px);
+    transition: opacity 460ms ease, transform 620ms cubic-bezier(.2,.78,.24,1);
+  }
+  deck-stage > section[data-deck-active] {
+    opacity: 1 !important;
+    transform: translateX(0);
+  }
+
+  /* ───────── SLIDE BASE ───────── */
+  .slide {
+    width: 1920px; height: 1080px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01","cv11";
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide::before {
+    /* sutil vinheta diagonal */
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(1200px 700px at 85% -10%, rgba(201,161,74,0.07), transparent 60%),
+      radial-gradient(900px 600px at -5% 110%, rgba(255,255,255,0.03), transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ───────── CHROME COMUM (topo + rodapé) ───────── */
+  .chrome-top, .chrome-bot {
+    position: absolute; left: 96px; right: 96px;
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--ink-3);
+    font-size: 16px; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 500;
+  }
+  .chrome-top { top: 56px; }
+  .chrome-bot { bottom: 56px; }
+
+  .brand {
+    display: inline-flex; align-items: center; gap: 14px;
+    color: var(--ink);
+    font-weight: 800; letter-spacing: 0.32em; font-size: 16px;
+  }
+  .brand .dot {
+    width: 8px; height: 8px; border-radius: 999px; background: var(--gold);
+    box-shadow: 0 0 0 4px rgba(201,161,74,0.15);
+  }
+
+  .crumb { display: inline-flex; align-items: center; gap: 18px; }
+  .crumb .sep { width: 28px; height: 1px; background: var(--line-2); display: inline-block; }
+  .crumb .gold { color: var(--gold); }
+
+  .page-num { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.08em; color: var(--ink-3); }
+  .page-num b { color: var(--gold); font-weight: 500; }
+
+  .rule-gold {
+    width: 64px; height: 2px; background: var(--gold); display: block;
+  }
+
+  /* ───────── TIPO ───────── */
+  .eyebrow {
+    font-size: 14px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600;
+  }
+  .h-display {
+    font-size: 168px; line-height: 0.92; letter-spacing: -0.035em;
+    font-weight: 800; color: var(--ink);
+    text-wrap: balance;
+  }
+  .h1 {
+    font-size: 96px; line-height: 0.96; letter-spacing: -0.03em;
+    font-weight: 700; color: var(--ink); margin: 0;
+    text-wrap: balance;
+  }
+  .h2 {
+    font-size: 64px; line-height: 1; letter-spacing: -0.025em;
+    font-weight: 700; color: var(--ink); margin: 0;
+  }
+  .h3 {
+    font-size: 32px; line-height: 1.12; letter-spacing: -0.01em;
+    font-weight: 600; color: var(--ink); margin: 0;
+  }
+  .lead {
+    font-size: 24px; line-height: 1.45; color: var(--ink-2);
+    max-width: 880px; font-weight: 400;
+  }
+  .body { font-size: 20px; line-height: 1.5; color: var(--ink-2); font-weight: 400; }
+  .small { font-size: 16px; line-height: 1.45; color: var(--ink-3); }
+  .mono { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.04em; color: var(--ink-3); }
+
+  .gold { color: var(--gold); }
+  em.gold, .italic-gold { color: var(--gold); font-style: italic; font-weight: 500; }
+
+  /* ───────── COMPONENTES ───────── */
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 36px;
+    position: relative;
+  }
+  .card .corner {
+    position: absolute; top: 0; left: 0; width: 32px; height: 2px; background: var(--gold);
+  }
+
+  .kpi {
+    display: flex; flex-direction: column; gap: 12px;
+    padding: 32px 36px 32px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    position: relative;
+  }
+  .kpi .label {
+    font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600;
+  }
+  .kpi .value {
+    font-size: 80px; line-height: 1; letter-spacing: -0.03em;
+    color: var(--ink); font-weight: 700;
+  }
+  .kpi .delta { font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
+  .kpi .delta.up    { color: var(--green); }
+  .kpi .delta.down  { color: var(--red); }
+  .kpi .foot { font-size: 14px; color: var(--ink-3); font-family: var(--font-mono); letter-spacing: 0.04em; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px;
+    font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    background: rgba(255,255,255,0.02);
+  }
+  .pill.gold { color: var(--gold); border-color: rgba(201,161,74,0.35); background: var(--gold-tint); }
+  .pill.green { color: var(--green); border-color: rgba(111,191,143,0.35); background: rgba(111,191,143,0.08); }
+  .pill.red { color: var(--red); border-color: rgba(217,131,108,0.35); background: rgba(217,131,108,0.08); }
+  .pill .dot { width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+
+  /* Lista numerada elegante */
+  .num-list { counter-reset: ll; list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
+  .num-list li {
+    counter-increment: ll;
+    display: grid; grid-template-columns: 56px 1fr; gap: 22px;
+    align-items: baseline;
+    padding-bottom: 18px; border-bottom: 1px solid var(--line);
+  }
+  .num-list li::before {
+    content: "0" counter(ll);
+    font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.04em;
+    color: var(--gold);
+  }
+  .num-list .ttl { font-size: 22px; color: var(--ink); font-weight: 600; letter-spacing: -0.005em; }
+  .num-list .sub { display: block; font-size: 16px; color: var(--ink-3); font-weight: 400; margin-top: 4px; }
+
+  /* Tabela executiva */
+  table.exec {
+    width: 100%; border-collapse: collapse;
+    font-size: 18px;
+  }
+  table.exec thead th {
+    text-align: left;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600;
+    padding: 0 0 16px;
+    border-bottom: 1px solid var(--line-2);
+  }
+  table.exec tbody td {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  table.exec tbody tr:last-child td { border-bottom: none; }
+  table.exec td.muted { color: var(--ink-2); font-weight: 400; }
+
+  /* Barras de progresso */
+  .bar { height: 8px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: var(--gold); border-radius: 999px; }
+
+  /* Timeline horizontal */
+  .timeline {
+    position: relative;
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
+    padding-top: 64px;
+  }
+  .timeline::before {
+    content: ""; position: absolute; top: 40px; left: 24px; right: 24px;
+    height: 1px; background: var(--line-2);
+  }
+  .tnode { position: relative; padding: 0 18px; }
+  .tnode .dot {
+    position: absolute; top: 32px; left: 18px;
+    width: 18px; height: 18px; border-radius: 999px;
+    background: var(--bg); border: 2px solid var(--gold);
+  }
+  .tnode.done .dot { background: var(--gold); }
+  .tnode .stage {
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); padding-top: 72px;
+  }
+  .tnode h4 {
+    font-size: 24px; line-height: 1.15; font-weight: 600; color: var(--ink);
+    margin: 8px 0 10px; letter-spacing: -0.01em;
+  }
+  .tnode p { font-size: 15px; line-height: 1.5; color: var(--ink-3); margin: 0; }
+
+  /* ───────── CAPA ───────── */
+  .cover { display: grid; grid-template-rows: auto 1fr auto; padding: 56px 96px; }
+  .cover .meta-grid {
+    display: grid; grid-template-columns: repeat(4, auto); gap: 56px;
+    margin-top: 40px;
+  }
+  .cover .meta-grid .lab {
+    font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600;
+  }
+  .cover .meta-grid .val {
+    font-size: 22px; color: var(--ink); font-weight: 500; margin-top: 8px;
+    letter-spacing: -0.005em;
+  }
+
+  /* SUMÁRIO panel (capa direita) */
+  .cover-aside {
+    position: absolute; right: 96px; top: 200px; bottom: 200px;
+    width: 360px;
+    border-left: 1px solid var(--line);
+    padding-left: 36px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    color: var(--ink-2);
+  }
+  .cover-aside .toc { display: grid; gap: 14px; }
+  .cover-aside .toc-row {
+    display: grid; grid-template-columns: 36px 1fr; align-items: baseline; gap: 14px;
+    font-size: 16px;
+  }
+  .cover-aside .toc-row .n { font-family: var(--font-mono); color: var(--gold); font-size: 13px; letter-spacing: 0.06em; }
+
+  /* ───────── LAYOUTS DE SLIDE ───────── */
+  .slide-pad { padding: 168px 96px 144px; height: 100%; box-sizing: border-box; }
+  .slide-pad-tight { padding: 168px 96px 120px; height: 100%; box-sizing: border-box; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+  .stack-32 { display: grid; gap: 32px; }
+  .stack-24 { display: grid; gap: 24px; }
+  .stack-16 { display: grid; gap: 16px; }
+
+  /* Bullet executivo */
+  ul.bul { list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
+  ul.bul li {
+    position: relative; padding-left: 28px; font-size: 22px; line-height: 1.45;
+    color: var(--ink);
+  }
+  ul.bul li::before {
+    content: ""; position: absolute; left: 0; top: 14px;
+    width: 14px; height: 1px; background: var(--gold);
+  }
+  ul.bul .sub { display: block; font-size: 16px; color: var(--ink-3); margin-top: 6px; font-weight: 400; }
+
+  /* Encerramento */
+  .closing { padding: 120px 96px 144px; }
+  .closing .quote {
+    font-size: 96px; line-height: 1.05; letter-spacing: -0.03em;
+    color: var(--ink); font-weight: 700;
+    max-width: 1500px;
+  }
+  .closing .quote em { color: var(--gold); font-style: italic; font-weight: 600; }
+  .closing .sig {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    border-top: 1px solid var(--line);
+    padding-top: 28px; margin-top: 48px;
+  }
+
+</style>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ════════════════════════════════════════════════════════════════
+       01 · CAPA
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide cover" data-label="Capa">
+    <div class="chrome-top">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span class="gold">CONFIDENCIAL</span><span class="sep"></span><span>REPORT v.012</span></div>
+    </div>
+
+    <div style="padding: 0 0 0 0; align-self: center; max-width: 1280px;">
+      <span class="rule-gold" style="margin-bottom: 40px;"></span>
+      <div class="eyebrow" style="margin-bottom: 28px;">R.O.P.R.E · Relatório Estratégico Quinzenal</div>
+      <h1 class="h-display">
+        Performance.<br/>
+        <em class="italic-gold" style="font-family: var(--font-sans);">Crescimento.</em><br/>
+        Estratégia.
+      </h1>
+
+      <div class="meta-grid">
+        <div>
+          <div class="lab">Cliente</div>
+          <div class="val">[ Nome do Cliente ]</div>
+        </div>
+        <div>
+          <div class="lab">Ciclo</div>
+          <div class="val">Q-12 · Quinzena 24</div>
+        </div>
+        <div>
+          <div class="lab">Período</div>
+          <div class="val">01 mai → 15 mai · 2026</div>
+        </div>
+        <div>
+          <div class="lab">Account Lead</div>
+          <div class="val">[ Responsável AZX ]</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOC lateral -->
+    <aside class="cover-aside">
+      <div>
+        <div class="mono" style="margin-bottom: 18px;">ÍNDICE</div>
+        <div class="toc">
+          <div class="toc-row"><span class="n">01</span><span>Visão geral da quinzena</span></div>
+          <div class="toc-row"><span class="n">02</span><span>Resultados</span></div>
+          <div class="toc-row"><span class="n">03</span><span>Oportunidades</span></div>
+          <div class="toc-row"><span class="n">04</span><span>Principais problemas</span></div>
+          <div class="toc-row"><span class="n">05</span><span>Roadmap estratégico</span></div>
+          <div class="toc-row"><span class="n">06</span><span>Plano de ação</span></div>
+          <div class="toc-row"><span class="n">07</span><span>Próximos passos</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="mono">DOC · ROPRE-2026-Q12</div>
+        <div class="small" style="margin-top:6px;">Preparado por AZX Performance</div>
+      </div>
+    </aside>
+
+    <div class="chrome-bot">
+      <div class="mono">→ Deslize para a direita</div>
+      <div class="page-num"><b>01</b> / 09</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       02 · VISÃO GERAL DA QUINZENA
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide" data-label="Visão Geral">
+    <div class="chrome-top">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span>R.O.P.R.E</span><span class="sep"></span><span class="gold">01 · Visão Geral</span></div>
+    </div>
+
+    <div class="slide-pad">
+      <div class="grid-2" style="height: 100%;">
+        <!-- Coluna esquerda: título -->
+        <div>
+          <span class="rule-gold" style="margin-bottom: 24px;"></span>
+          <div class="eyebrow" style="margin-bottom: 16px;">Capítulo 01</div>
+          <h2 class="h1">Panorama da<br/>quinzena.</h2>
+          <p class="lead" style="margin-top: 36px;">
+            Operação avança em <em class="italic-gold">três frentes simultâneas</em> — captação, qualificação e fechamento — com sinais claros de maturação do funil e ganhos de eficiência operacional.
+          </p>
+
+          <div class="stack-16" style="margin-top: 48px;">
+            <div class="pill gold"><span class="dot"></span>Avanço sustentado em 4 indicadores-chave</div>
+            <div class="pill"><span class="dot"></span>2 gargalos prioritários endereçados</div>
+            <div class="pill"><span class="dot"></span>3 novas iniciativas em validação</div>
+          </div>
+        </div>
+
+        <!-- Coluna direita: cards -->
+        <div class="stack-24">
+          <div class="card">
+            <span class="corner"></span>
+            <div class="eyebrow" style="margin-bottom: 14px;">Principais avanços</div>
+            <ul class="bul">
+              <li>Queda de <b class="gold">−18%</b> no CPL com novo conjunto de criativos.<span class="sub">Linha "Autoridade" supera baseline em todas as semanas.</span></li>
+              <li>Aumento de <b class="gold">+24%</b> no comparecimento em reuniões.<span class="sub">Implementação de cadência de confirmação 24h e 2h antes.</span></li>
+              <li>Funil de qualificação encurtado em <b class="gold">1,8 dia</b>.<span class="sub">SLA de primeiro contato dentro da meta de 5min.</span></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <span class="corner" style="background: var(--red);"></span>
+            <div class="eyebrow" style="margin-bottom: 14px; color: var(--red);">Gargalos da operação</div>
+            <ul class="bul">
+              <li>Volume de leads frios subiu na semana 02.<span class="sub">Ajuste de público em andamento — entrega prevista até 18/05.</span></li>
+              <li>Follow-up pós-reunião sem padronização.<span class="sub">Cadência será sistematizada no CRM nesta quinzena.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bot">
+      <div class="mono">01 → 02 → 03 → 04 → 05 → 06 → 07 → 08</div>
+      <div class="page-num"><b>02</b> / 09</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       03 · RESULTADOS DA QUINZENA
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide" data-label="Resultados">
+    <div class="chrome-top">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span>R.O.P.R.E</span><span class="sep"></span><span class="gold">02 · Resultados</span></div>
+    </div>
+
+    <div class="slide-pad-tight">
+      <div style="display:flex; align-items:flex-end; justify-content: space-between; margin-bottom: 40px;">
+        <div>
+          <span class="rule-gold" style="margin-bottom: 24px;"></span>
+          <div class="eyebrow" style="margin-bottom: 14px;">Capítulo 02 · Indicadores</div>
+          <h2 class="h2">Resultados em números.</h2>
+        </div>
+        <div style="text-align:right;">
+          <div class="mono">Baseline: quinzena anterior</div>
+          <div class="mono" style="margin-top:6px;">Moeda: BRL · Atualizado 15 mai 2026</div>
+        </div>
+      </div>
+
+      <!-- 4 KPIs principais -->
+      <div class="grid-4" style="margin-bottom: 28px;">
+        <div class="kpi">
+          <span class="label">Leads gerados</span>
+          <span class="value">1.482</span>
+          <span class="delta up">▲ +21,3% vs. quinzena anterior</span>
+          <span class="foot">Meta · 1.350 · alcançada</span>
+        </div>
+        <div class="kpi">
+          <span class="label">CPL médio</span>
+          <span class="value">R$ 38,40</span>
+          <span class="delta up">▼ −18,0% vs. quinzena anterior</span>
+          <span class="foot">Meta · ≤ R$ 42,00 · alcançada</span>
+        </div>
+        <div class="kpi">
+          <span class="label">Agendamentos</span>
+          <span class="value">214</span>
+          <span class="delta up">▲ +12,6% vs. quinzena anterior</span>
+          <span class="foot">Taxa lead→ag · 14,4%</span>
+        </div>
+        <div class="kpi">
+          <span class="label">Comparecimento</span>
+          <span class="value">68%</span>
+          <span class="delta up">▲ +9 p.p. vs. quinzena anterior</span>
+          <span class="foot">Meta · ≥ 60% · alcançada</span>
+        </div>
+      </div>
+
+      <!-- Linha inferior: vendas + ROI + barra de evolução -->
+      <div class="grid-3">
+        <div class="kpi">
+          <span class="label">Vendas fechadas</span>
+          <span class="value">47</span>
+          <span class="delta up">▲ +6 vs. quinzena anterior</span>
+          <span class="foot">Conversão ag→venda · 21,9%</span>
+        </div>
+        <div class="kpi">
+          <span class="label">Faturamento</span>
+          <span class="value">R$ 612k</span>
+          <span class="delta up">▲ +14,8% vs. quinzena anterior</span>
+          <span class="foot">Ticket médio · R$ 13.020</span>
+        </div>
+        <div class="kpi">
+          <span class="label">ROAS</span>
+          <span class="value">8,4x</span>
+          <span class="delta up">▲ +1,2x vs. quinzena anterior</span>
+          <span class="foot">Investimento · R$ 72.870</span>
+        </div>
+      </div>
+
+      <!-- Evolução semanal (mini barras) -->
+      <div style="margin-top: 28px; display:grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: center; border-top: 1px solid var(--line); padding-top: 24px;">
+        <div>
+          <div class="mono" style="color: var(--gold);">EVOLUÇÃO · 6 SEM.</div>
+          <div class="small" style="margin-top:4px;">Faturamento semanal</div>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(6,1fr); gap: 14px; align-items: stretch; height: 88px;">
+          <div style="display:flex; flex-direction:column; justify-content:flex-end; gap:6px; height:100%;"><div style="height:32%; background:rgba(255,255,255,0.18); border-radius:2px;"></div><div class="mono" style="font-size:11px;">S-5</div></div>
+          <div style="display:flex; flex-direction:column; justify-content:flex-end; gap:6px; height:100%;"><div style="height:46%; background:rgba(255,255,255,0.22); border-radius:2px;"></div><div class="mono" style="font-size:11px;">S-4</div></div>
+          <div style="display:flex; flex-direction:column; justify-content:flex-end; gap:6px; height:100%;"><div style="height:58%; background:rgba(255,255,255,0.28); border-radius:2px;"></div><div class="mono" style="font-size:11px;">S-3</div></div>
+          <div style="display:flex; flex-direction:column; justify-content:flex-end; gap:6px; height:100%;"><div style="height:64%; background:rgba(255,255,255,0.34); border-radius:2px;"></div><div class="mono" style="font-size:11px;">S-2</div></div>
+          <div style="display:flex; flex-direction:column; justify-content:flex-end; gap:6px; height:100%;"><div style="height:86%; background:var(--gold-3); border-radius:2px;"></div><div class="mono" style="font-size:11px;">S-1</div></div>
+          <div style="display:flex; flex-direction:column; justify-content:flex-end; gap:6px; height:100%;"><div style="height:100%; background:var(--gold); border-radius:2px;"></div><div class="mono" style="font-size:11px; color: var(--gold);">S-0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bot">
+      <div class="mono">7 indicadores · 6 acima da meta</div>
+      <div class="page-num"><b>03</b> / 09</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       04 · OPORTUNIDADES IDENTIFICADAS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide" data-label="Oportunidades">
+    <div class="chrome-top">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span>R.O.P.R.E</span><span class="sep"></span><span class="gold">03 · Oportunidades</span></div>
+    </div>
+
+    <div class="slide-pad">
+      <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 64px; height: 100%;">
+        <div>
+          <span class="rule-gold" style="margin-bottom: 24px;"></span>
+          <div class="eyebrow" style="margin-bottom: 16px;">Capítulo 03</div>
+          <h2 class="h1">Onde existe<br/><em class="italic-gold">alavanca.</em></h2>
+          <p class="lead" style="margin-top: 32px; font-size: 20px;">
+            Quatro frentes com potencial de impacto direto no faturamento nas próximas duas quinzenas. Priorizadas por esforço × retorno esperado.
+          </p>
+          <div class="mono" style="margin-top: 40px; color: var(--gold);">PRIORIZAÇÃO · ICE SCORE</div>
+        </div>
+
+        <div class="stack-24">
+          <div class="card" style="display:grid; grid-template-columns: 64px 1fr auto; gap: 28px; align-items: center;">
+            <div class="mono" style="font-size: 28px; color: var(--gold); font-weight: 500;">01</div>
+            <div>
+              <h3 class="h3">Escalar campanha "Autoridade" para audiências lookalike 2%.</h3>
+              <p class="body" style="margin: 8px 0 0; font-size: 18px;">Conjunto de criativos com CPL 32% abaixo da média. Capacidade de orçamento ainda disponível.</p>
+            </div>
+            <div style="text-align:right;"><span class="pill gold">Alto impacto</span><div class="mono" style="margin-top:8px;">ICE · 8,6</div></div>
+          </div>
+
+          <div class="card" style="display:grid; grid-template-columns: 64px 1fr auto; gap: 28px; align-items: center;">
+            <div class="mono" style="font-size: 28px; color: var(--gold); font-weight: 500;">02</div>
+            <div>
+              <h3 class="h3">Reativação de base fria via WhatsApp segmentado.</h3>
+              <p class="body" style="margin: 8px 0 0; font-size: 18px;">~3.200 leads aquecidos sem contato há +60 dias. Esforço operacional baixo.</p>
+            </div>
+            <div style="text-align:right;"><span class="pill gold">Alto impacto</span><div class="mono" style="margin-top:8px;">ICE · 8,1</div></div>
+          </div>
+
+          <div class="card" style="display:grid; grid-template-columns: 64px 1fr auto; gap: 28px; align-items: center;">
+            <div class="mono" style="font-size: 28px; color: var(--gold); font-weight: 500;">03</div>
+            <div>
+              <h3 class="h3">Novo público — gestores de operação 35-50.</h3>
+              <p class="body" style="margin: 8px 0 0; font-size: 18px;">Teste piloto na semana 02 com CTR 2,1x acima do baseline. Pronto para escala.</p>
+            </div>
+            <div style="text-align:right;"><span class="pill">Médio impacto</span><div class="mono" style="margin-top:8px;">ICE · 7,2</div></div>
+          </div>
+
+          <div class="card" style="display:grid; grid-template-columns: 64px 1fr auto; gap: 28px; align-items: center;">
+            <div class="mono" style="font-size: 28px; color: var(--gold); font-weight: 500;">04</div>
+            <div>
+              <h3 class="h3">Upsell estruturado para clientes ativos no 4º mês.</h3>
+              <p class="body" style="margin: 8px 0 0; font-size: 18px;">Janela de receita incremental com baixo custo de aquisição. Requer alinhamento comercial.</p>
+            </div>
+            <div style="text-align:right;"><span class="pill">Médio impacto</span><div class="mono" style="margin-top:8px;">ICE · 6,8</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bot">
+      <div class="mono">4 oportunidades · 2 prontas para execução</div>
+      <div class="page-num"><b>04</b> / 09</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       05 · PRINCIPAIS PROBLEMAS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide" data-label="Problemas">
+    <div class="chrome-top">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span>R.O.P.R.E</span><span class="sep"></span><span class="gold">04 · Problemas</span></div>
+    </div>
+
+    <div class="slide-pad">
+      <div style="display:flex; align-items:flex-end; justify-content: space-between; margin-bottom: 48px;">
+        <div>
+          <span class="rule-gold" style="margin-bottom: 24px;"></span>
+          <div class="eyebrow" style="margin-bottom: 16px;">Capítulo 04</div>
+          <h2 class="h1">O que está <em class="italic-gold">sob gestão.</em></h2>
+        </div>
+        <p class="lead" style="text-align:right; font-size: 20px; max-width: 520px;">
+          Cada ponto abaixo já tem responsável, prazo e métrica de saída definidos. <em class="italic-gold">Nada permanece em aberto.</em>
+        </p>
+      </div>
+
+      <div class="grid-2" style="gap: 24px;">
+        <!-- coluna 1 -->
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+            <span class="pill red"><span class="dot"></span>EM ANDAMENTO</span>
+            <span class="mono">P1 · CRÍTICO</span>
+          </div>
+          <h3 class="h3">SLA de primeiro contato acima da meta em 3 dias.</h3>
+          <p class="body" style="margin-top: 12px;">Time comercial sobrecarregado entre 14h e 17h. Roteamento por disponibilidade em implantação.</p>
+          <div class="bar" style="margin-top: 22px;"><span style="width: 64%;"></span></div>
+          <div class="mono" style="margin-top: 10px; display:flex; justify-content: space-between;">
+            <span>64% endereçado</span><span>Saída prevista · 22/05</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+            <span class="pill"><span class="dot"></span>PLANEJADO</span>
+            <span class="mono">P2 · ALTO</span>
+          </div>
+          <h3 class="h3">CRM desorganizado — campos inconsistentes entre etapas.</h3>
+          <p class="body" style="margin-top: 12px;">Auditoria concluída. Migração para novo modelo de pipeline na semana 03.</p>
+          <div class="bar" style="margin-top: 22px;"><span style="width: 22%;"></span></div>
+          <div class="mono" style="margin-top: 10px; display:flex; justify-content: space-between;">
+            <span>22% endereçado</span><span>Saída prevista · 29/05</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+            <span class="pill green"><span class="dot"></span>RESOLVIDO</span>
+            <span class="mono">P3 · MÉDIO</span>
+          </div>
+          <h3 class="h3">Follow-up pós-reunião sem padronização.</h3>
+          <p class="body" style="margin-top: 12px;">Cadência de 7 toques em 14 dias implantada via CRM. Adoção da equipe em 100% na semana 02.</p>
+          <div class="bar" style="margin-top: 22px;"><span style="width: 100%; background: var(--green);"></span></div>
+          <div class="mono" style="margin-top: 10px; display:flex; justify-content: space-between;">
+            <span>Concluído · 12/05</span><span>Próximo: medir uplift</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+            <span class="pill"><span class="dot"></span>EM MONITORAMENTO</span>
+            <span class="mono">P3 · MÉDIO</span>
+          </div>
+          <h3 class="h3">Volume crescente de leads frios em campanha aberta.</h3>
+          <p class="body" style="margin-top: 12px;">Ajuste de público e exclusão de interesses genéricos em teste. Reavaliação na próxima quinzena.</p>
+          <div class="bar" style="margin-top: 22px;"><span style="width: 48%;"></span></div>
+          <div class="mono" style="margin-top: 10px; display:flex; justify-content: space-between;">
+            <span>48% endereçado</span><span>Reavaliação · 30/05</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bot">
+      <div class="mono">4 itens · 1 resolvido · 0 em aberto</div>
+      <div class="page-num"><b>05</b> / 09</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       06 · ROADMAP ESTRATÉGICO
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide" data-label="Roadmap">
+    <div class="chrome-top">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span>R.O.P.R.E</span><span class="sep"></span><span class="gold">05 · Roadmap</span></div>
+    </div>
+
+    <div class="slide-pad">
+      <span class="rule-gold" style="margin-bottom: 24px;"></span>
+      <div class="eyebrow" style="margin-bottom: 16px;">Capítulo 05</div>
+      <h2 class="h1" style="max-width: 1300px;">Roadmap estratégico — <em class="italic-gold">próximas 10 semanas.</em></h2>
+      <p class="lead" style="margin-top: 24px;">
+        Sequência de movimentos coordenados entre mídia, comercial e produto para sustentar o ritmo de crescimento.
+      </p>
+
+      <div class="timeline" style="margin-top: 80px;">
+        <div class="tnode done">
+          <span class="dot"></span>
+          <div class="stage">Quinzena · 24</div>
+          <h4>Estabilização do funil.</h4>
+          <p>SLA comercial, cadência de follow-up e padronização do pipeline.</p>
+        </div>
+        <div class="tnode">
+          <span class="dot"></span>
+          <div class="stage">Quinzena · 25</div>
+          <h4>Escala "Autoridade".</h4>
+          <p>Aumento de 40% no orçamento da linha de melhor performance + lookalike 2%.</p>
+        </div>
+        <div class="tnode">
+          <span class="dot"></span>
+          <div class="stage">Quinzena · 26</div>
+          <h4>Automação de qualificação.</h4>
+          <p>Régua de WhatsApp pré-reunião + reativação da base fria.</p>
+        </div>
+        <div class="tnode">
+          <span class="dot"></span>
+          <div class="stage">Quinzena · 27</div>
+          <h4>Novos criativos · ciclo Q2.</h4>
+          <p>Produção de 12 peças orientadas a 3 novos ângulos validados.</p>
+        </div>
+        <div class="tnode">
+          <span class="dot"></span>
+          <div class="stage">Quinzena · 28</div>
+          <h4>Estrutura de upsell.</h4>
+          <p>Trilha comercial para clientes em 4º mês — receita recorrente incremental.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 80px; display:flex; gap: 24px; align-items:center;">
+        <span class="pill gold"><span class="dot"></span>Em execução</span>
+        <span class="pill"><span class="dot"></span>Próximo</span>
+        <span class="pill"><span class="dot"></span>Planejado</span>
+        <span style="color: var(--ink-3); font-size: 16px; margin-left: auto;">Revisão estratégica a cada quinzena · ajuste contínuo</span>
+      </div>
+    </div>
+
+    <div class="chrome-bot">
+      <div class="mono">5 marcos · horizonte 10 sem.</div>
+      <div class="page-num"><b>06</b> / 09</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       07 · PLANO DE AÇÃO
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide" data-label="Plano de Ação">
+    <div class="chrome-top">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span>R.O.P.R.E</span><span class="sep"></span><span class="gold">06 · Plano de Ação</span></div>
+    </div>
+
+    <div class="slide-pad">
+      <div style="display:flex; align-items:flex-end; justify-content: space-between; margin-bottom: 56px;">
+        <div>
+          <span class="rule-gold" style="margin-bottom: 24px;"></span>
+          <div class="eyebrow" style="margin-bottom: 16px;">Capítulo 06</div>
+          <h2 class="h1">Plano de ação · <em class="italic-gold">quinzena 25.</em></h2>
+        </div>
+        <div class="mono" style="text-align:right;">
+          <div>7 ações · 4 responsáveis · 2 sem.</div>
+          <div style="margin-top:6px;">Atualizado · 15 mai 2026</div>
+        </div>
+      </div>
+
+      <table class="exec">
+        <thead>
+          <tr>
+            <th style="width: 38%;">Ação</th>
+            <th style="width: 18%;">Responsável</th>
+            <th style="width: 16%;">Prazo</th>
+            <th style="width: 14%;">Prioridade</th>
+            <th style="width: 14%; text-align:right;">Métrica de saída</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Subir orçamento +40% na linha Autoridade · lookalike 2%.</td>
+            <td class="muted">Tráfego · Bruno R.</td>
+            <td class="muted">19 mai</td>
+            <td><span class="pill gold"><span class="dot"></span>P1</span></td>
+            <td class="muted" style="text-align:right;">CPL ≤ R$ 40</td>
+          </tr>
+          <tr>
+            <td>Ativar régua de reativação · base fria (3.200 leads).</td>
+            <td class="muted">CRM · Camila M.</td>
+            <td class="muted">21 mai</td>
+            <td><span class="pill gold"><span class="dot"></span>P1</span></td>
+            <td class="muted" style="text-align:right;">≥ 8% retorno</td>
+          </tr>
+          <tr>
+            <td>Migrar pipeline para o novo modelo · 6 etapas padronizadas.</td>
+            <td class="muted">Operações · Diego F.</td>
+            <td class="muted">23 mai</td>
+            <td><span class="pill"><span class="dot"></span>P2</span></td>
+            <td class="muted" style="text-align:right;">100% adoção</td>
+          </tr>
+          <tr>
+            <td>Implantar roteamento dinâmico de leads (14h–17h).</td>
+            <td class="muted">Comercial · Diego F.</td>
+            <td class="muted">22 mai</td>
+            <td><span class="pill gold"><span class="dot"></span>P1</span></td>
+            <td class="muted" style="text-align:right;">SLA ≤ 5min</td>
+          </tr>
+          <tr>
+            <td>Produzir 6 novos criativos · ângulo Resultados Reais.</td>
+            <td class="muted">Conteúdo · Letícia V.</td>
+            <td class="muted">27 mai</td>
+            <td><span class="pill"><span class="dot"></span>P2</span></td>
+            <td class="muted" style="text-align:right;">CTR ≥ 1,8%</td>
+          </tr>
+          <tr>
+            <td>Teste de público · gestores 35-50 · orçamento R$ 8k.</td>
+            <td class="muted">Tráfego · Bruno R.</td>
+            <td class="muted">28 mai</td>
+            <td><span class="pill"><span class="dot"></span>P2</span></td>
+            <td class="muted" style="text-align:right;">≥ 80 leads</td>
+          </tr>
+          <tr>
+            <td>Desenhar trilha de upsell para clientes em 4º mês.</td>
+            <td class="muted">Estratégia · AZX</td>
+            <td class="muted">30 mai</td>
+            <td><span class="pill"><span class="dot"></span>P3</span></td>
+            <td class="muted" style="text-align:right;">Documento V1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chrome-bot">
+      <div class="mono">Próxima revisão · 30 mai 2026</div>
+      <div class="page-num"><b>07</b> / 09</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       08 · PRÓXIMOS PASSOS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide" data-label="Próximos Passos">
+    <div class="chrome-top">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span>R.O.P.R.E</span><span class="sep"></span><span class="gold">07 · Próximos Passos</span></div>
+    </div>
+
+    <div class="slide-pad">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 96px; height: 100%;">
+        <div>
+          <span class="rule-gold" style="margin-bottom: 24px;"></span>
+          <div class="eyebrow" style="margin-bottom: 16px;">Capítulo 07</div>
+          <h2 class="h1">Direção para a<br/><em class="italic-gold">próxima quinzena.</em></h2>
+          <p class="lead" style="margin-top: 32px;">
+            Três prioridades de execução e duas metas de resultado. Tudo o mais é ruído.
+          </p>
+
+          <div style="margin-top: 72px; display:grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="kpi">
+              <span class="label">Meta · Faturamento</span>
+              <span class="value" style="font-size: 56px;">R$ 700k</span>
+              <span class="foot">+14% vs. quinzena atual</span>
+            </div>
+            <div class="kpi">
+              <span class="label">Meta · ROAS</span>
+              <span class="value" style="font-size: 56px;">9,0x</span>
+              <span class="foot">Manter eficiência com escala</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="mono" style="color: var(--gold); margin-bottom: 24px;">PRIORIDADES · QUINZENA 25</div>
+          <ol class="num-list">
+            <li>
+              <div>
+                <span class="ttl">Escalar mídia na linha de melhor retorno.</span>
+                <span class="sub">+40% orçamento · Autoridade + lookalike 2%. Sem fragmentar criativos.</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="ttl">Recuperar receita dormente na base.</span>
+                <span class="sub">Reativação WhatsApp · 3.200 leads · meta de 8% de retorno.</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="ttl">Eliminar o gargalo de SLA comercial.</span>
+                <span class="sub">Roteamento dinâmico ativo até 22/05 · primeiro contato em ≤ 5min.</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="ttl">Padronizar o pipeline no CRM.</span>
+                <span class="sub">Novo modelo de 6 etapas · 100% adoção até o fim da quinzena.</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="ttl">Validar o novo público com teste controlado.</span>
+                <span class="sub">Gestores 35-50 · R$ 8k · decisão go/no-go em 7 dias.</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bot">
+      <div class="mono">5 prioridades · 2 metas · 1 quinzena</div>
+      <div class="page-num"><b>08</b> / 09</div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       09 · ENCERRAMENTO
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="slide closing" data-label="Encerramento">
+    <div class="chrome-top" style="left: 96px; right: 96px; top: 56px; position: absolute;">
+      <div class="brand"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+      <div class="crumb"><span>R.O.P.R.E</span><span class="sep"></span><span class="gold">Encerramento</span></div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; justify-content:flex-end; height:100%;">
+      <span class="rule-gold" style="margin-bottom: 40px;"></span>
+      <div class="eyebrow" style="margin-bottom: 28px;">Mensagem final</div>
+      <p class="quote">
+        Performance é consequência<br/>
+        de <em>execução estratégica</em><br/>
+        consistente.
+      </p>
+
+      <div class="sig">
+        <div>
+          <div class="brand" style="font-size: 18px;"><span class="dot"></span>AZX&nbsp;PERFORMANCE</div>
+          <div class="small" style="margin-top: 8px;">Consultoria estratégica · operação · crescimento</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="mono">PRÓXIMA R.O.P.R.E · 30 MAI 2026</div>
+          <div class="small" style="margin-top: 6px;">Preparado para [ Nome do Cliente ] · Ciclo Q-12 · Quinzena 24</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chrome-bot">
+      <div class="mono">FIM · ROPRE-2026-Q12</div>
+      <div class="page-num"><b>09</b> / 09</div>
+    </div>
+  </section>
+
+</deck-stage>
+
+<script src="deck-stage.js"></script>
+</body>
+</html>
